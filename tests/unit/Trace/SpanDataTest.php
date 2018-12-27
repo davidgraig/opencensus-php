@@ -88,4 +88,18 @@ class SpanDataTest extends TestCase
         $this->assertInternalType('string', $hashId);
         $this->assertEquals($hashId, $spanData2->stackTraceHashId());
     }
+
+    /**
+     * @dataProvider spanDataOptions
+     */
+    public function testCanBeJsonSerialized($key, $value)
+    {
+        $startTime = new \DateTime();
+        $endTime = new \DateTime();
+        $spanData = new SpanData('span-name', 'aaa', 'bbb', $startTime, $endTime, [
+            $key => $value
+        ]);
+        $jsonString = json_encode($spanData);
+        $this->assertFalse($jsonString === '{}', "The serialized json string should not be an empty object");
+    }
 }

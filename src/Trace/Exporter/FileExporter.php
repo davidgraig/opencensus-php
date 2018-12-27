@@ -58,33 +58,6 @@ class FileExporter implements ExporterInterface
      */
     public function export(array $spans)
     {
-        $spans = $this->convertSpans($spans);
         return file_put_contents($this->filename, json_encode($spans) . PHP_EOL, FILE_APPEND) !== false;
-    }
-
-    /**
-     * Convert spans into array ready for serialization.
-     *
-     * @param SpanData[] $spans
-     * @return array Representation of the collected trace spans ready for serialization
-     */
-    private function convertSpans(array $spans)
-    {
-        return array_map(function (SpanData $span) {
-            return [
-                'traceId' => $span->traceId(),
-                'name' => $span->name(),
-                'spanId' => $span->spanId(),
-                'parentSpanId' => $span->parentSpanId(),
-                'stackTrace' => $span->stackTrace(),
-                'startTime' => $span->startTime(),
-                'endTime' => $span->endTime(),
-                'status' => $span->status(),
-                'attributes' => $span->attributes(),
-                'timeEvents' => $span->timeEvents(),
-                'links' => $span->links(),
-                'sameProcessAsParentSpan' => $span->sameProcessAsParentSpan(),
-            ];
-        }, $spans);
     }
 }

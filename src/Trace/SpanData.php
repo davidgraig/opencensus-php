@@ -17,6 +17,8 @@
 
 namespace OpenCensus\Trace;
 
+use JsonSerializable;
+
 /**
  * This plain PHP class represents a read-only version of a single timed event
  * within a Trace. Spans can be nested and form a trace tree. Often, a trace
@@ -24,7 +26,7 @@ namespace OpenCensus\Trace;
  * and, optionally, one or more subspans for its suboperations. Spans do not
  * need to be contiguous. There may be gaps between spans in a trace.
  */
-class SpanData
+class SpanData implements JsonSerializable
 {
     /**
      * Unique identifier for a trace. All spans from the same Trace share the
@@ -344,5 +346,30 @@ class SpanData
     public function kind()
     {
         return $this->kind;
+    }
+
+    /**
+     * Specify data which should be serialized to JSON
+     * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    public function jsonSerialize()
+    {
+            return [
+                'traceId' => $this->traceId(),
+                'name' => $this->name(),
+                'spanId' => $this->spanId(),
+                'parentSpanId' => $this->parentSpanId(),
+                'stackTrace' => $this->stackTrace(),
+                'startTime' => $this->startTime(),
+                'endTime' => $this->endTime(),
+                'status' => $this->status(),
+                'attributes' => $this->attributes(),
+                'timeEvents' => $this->timeEvents(),
+                'links' => $this->links(),
+                'sameProcessAsParentSpan' => $this->sameProcessAsParentSpan(),
+            ];
     }
 }
