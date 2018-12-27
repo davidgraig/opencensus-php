@@ -4,6 +4,9 @@
 # VSCode
 .vscode/
 
+# Intellij
+.idea/
+
 # Composer
 build/
 cache/
